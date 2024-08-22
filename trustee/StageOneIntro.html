@@ -1,0 +1,42 @@
+{{ block title }}
+    Stage 1
+{{ endblock }}
+
+{{ block content }}
+    As mentioned, you have been paired with another individual.
+    Together, you will now play a game where you both may earn tokens.
+    Tokens have a real cash value where one token is equal to £0.20.
+    I will now refer to you as person B and your partner as person A.
+    Both you and your partner receive the same information below about the game.
+
+<br>
+<br>
+
+    Person A first receives 5 tokens while person B receives nothing.
+    Person A may send some, none, or all of this amount to person B.
+    Any amount they do not send is theirs to keep. Any amount they do send to you is tripled.
+    For example, if person A sends 2 tokens then person B will receive 6 tokens.
+    Person B then decide how many of the tokens received they wish to return to person A.
+
+<br>
+<br>
+    Person A's earnings from this round are the tokens they do not send plus the tokens returned to them.
+    Person B's earnings equal the amount received minus the amount they return.
+
+<br>
+<br>
+    The game is shown in the below diagram.
+<br>
+<br>
+    <img src="{{ static 'manager/Trust_game.png'}}" width="150"/>
+
+<br>
+<br>
+    Click next to be matched with a partner and begin the game.
+<br>
+<br>
+
+    {{ next_button }}
+{{ endblock }}
+
+
