@@ -34,20 +34,25 @@ class Player(BasePlayer):
             [6, '60-69 years'],
             [7, '70 years and over']
         ],
-        widget=widgets.RadioSelect
     )
     education = models.IntegerField(
         choices=[
-            [1, 'Did not graduate high school'],
-            [2, 'High school graduate'],
-            [3, 'Some college education'],
-            [4, 'Undergraduate degree'],
-            [5, 'Postgraduate degree']
-        ],
-        widget=widgets.RadioSelect
+            [1, 'Less than 5 GCSEs (or equivalent)'],
+            [2, '5 or more GCSEs or equivalent (level 2) apprenticeship'],
+            [3, 'A levels or equivalent (level 3) apprenticeship'],
+            [4, 'Foundation degree or equivalent (level 4/5) apprenticeship'],
+            [5, 'Undergraduate degree or equivalent level 6 apprenticeship'],
+            [6, 'Master degree or equivalent level 7 apprenticeship'],
+            [7, 'Doctoral degree']
+        ]
     )
     accepted = models.IntegerField(initial=0)
-    english_by_birth = models.IntegerField(initial=1)
+    english_by_birth = models.IntegerField(
+        choices =[
+            [1, 'Yes'],
+            [2, 'No'],
+        ]
+    )
     region_of_birth = models.IntegerField(
         choices=[
             [1, 'East of England'],
@@ -58,9 +63,14 @@ class Player(BasePlayer):
             [6, 'South East'],
             [7, 'South West'],
             [8, 'Yorkshire and the Humber'],
-        ], widget=widgets.RadioSelect
+        ]
     )
-    currently_live_in_england = models.IntegerField()
+    currently_live_in_england = models.IntegerField(
+        choices=[
+            [1, 'Yes'],
+            [2, 'No'],
+        ]
+    )
     region_of_domicile = models.IntegerField(
         choices=[
             [1, 'East of England'],
@@ -71,7 +81,7 @@ class Player(BasePlayer):
             [6, 'South East'],
             [7, 'South West'],
             [8, 'Yorkshire and the Humber']
-        ], widget=widgets.RadioSelect
+        ]
     )
     regional_identity = models.IntegerField(
         choices=[
@@ -205,7 +215,24 @@ class Accepted(Page):
         if player.northern == 1:
             participant.group = 1
 
-        participant.ingroup = random.choice([0, 1])
+        participant.ingroup = random.randint(0, 1)
+
+        participant.order = random.randint(0,1)
+
+class Outro(Page):
+
+    @staticmethod
+    def is_displayed(player):
+        return player.accepted == 1
+
+    @staticmethod
+    def app_after_this_page(player, upcoming_apps):
+
+        if player.participant.order == 0:
+            return "trustee"
+        if player.participant.order == 1:
+            return "recipient"
 
 
-page_sequence = [Intro, English, Birth, EnglandLive, Domicile, Identity, Other, Unsuccessful, Accepted]
+
+page_sequence = [Intro, English, Birth, EnglandLive, Domicile, Identity, Other, Unsuccessful, Accepted, Outro]

@@ -14,15 +14,12 @@ Please answer the following questions truthfully.
 </pr>
 <br>
 <br>
-<form>
-  <input type="radio" name="english_by_birth" value=1>
-  <label>Yes</label><br>
-  <input type="radio" name="english_by_birth" value=0>
-  <label>No</label><br>
-</form>
-<br>
+<form method="post">
+        {{ form.english_by_birth }}
+    <br>
+        <button type="submit" class="btn btn-primary">Next</button>
+    </form>
 <br>
 
-{{next_button}}
 
 {{endblock}}

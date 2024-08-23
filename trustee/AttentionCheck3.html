@@ -2,24 +2,15 @@
 
 {{ endblock }}
 
-{{block content}}
-<br>
-<br>
-<br>
-<br>
-<pr>
-    Do you currently live in England?
-</pr>
+{{ block content }}
+3: If your partner sends you 4 tokens, how many will you receive?
 <br>
 <br>
 <form method="post">
-        {{ form.currently_live_in_england }}
+        {{ form.check3 }}
     <br>
         <button type="submit" class="btn btn-primary">Next</button>
     </form>
 <br>
 <br>
-<br>
-
-
-{{endblock}}
+{{ endblock}}

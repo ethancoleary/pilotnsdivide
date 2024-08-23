@@ -12,30 +12,16 @@
 </pr>
 <br>
 <br>
-<form>
-  <input type="radio" name="region_of_birth" value=1>
-  <label>East of England</label><br>
-  <input type="radio" name="region_of_birth" value=2>
-  <label>East Midlands</label><br>
-    <input type="radio" name="region_of_birth" value=3>
-  <label>London</label><br>
-  <input type="radio" name="region_of_birth" value=4>
-  <label>North East</label><br>
-    <input type="radio" name="region_of_birth" value=5>
-  <label>North West</label><br>
-  <input type="radio" name="region_of_birth" value=6>
-  <label>South East</label><br>
-    <input type="radio" name="region_of_birth" value=7>
-  <label>South West</label><br>
-  <input type="radio" name="region_of_birth" value=8>
-  <label>Yorkshire and the Humber</label><br>
-</form>
+<form method="post">
+        {{ form.region_of_birth }}
+    <br>
+        <button type="submit" class="btn btn-primary">Next</button>
+    </form>
+<br>
 <br>
 <br>
 If you are unsure, please input your best guess.
 <br>
-<br>
 
-{{next_button}}
 
 {{endblock}}

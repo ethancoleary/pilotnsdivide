@@ -11,12 +11,13 @@ Which age bracket do you belong to?<br>
 <p> {{ form.age }} </p>
 <br>
 What is the highest level of education that you have achieved?<br>
-<p>{{ form.education }}</p>
+<form method="post">
+        {{ form.education }}
+    <br>
+        <button type="submit" class="btn btn-primary">Next</button>
+    </form>
 <br>
 <br>
 <br>
-<br>
-
-{{next_button}}
 
 {{endblock}}

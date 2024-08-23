@@ -2,22 +2,16 @@
 
 {{ endblock }}
 
-{{block content}}
-<br>
-<br>
-<br>
-<br>
-<pr>
-    Which of the following best describes your regional identity?
-</pr>
+{{ block content }}
+1: How many tokens will you receive at the beginning of the game?
 <br>
 <br>
 <form method="post">
-        {{ form.regional_identity }}
+        {{ form.check1 }}
     <br>
         <button type="submit" class="btn btn-primary">Next</button>
     </form>
 <br>
 <br>
 
-{{endblock}}
+{{ endblock}}
