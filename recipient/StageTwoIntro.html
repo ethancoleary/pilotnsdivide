@@ -1,0 +1,41 @@
+{{ block title }}
+    Stage {{ round }}
+{{ endblock }}
+
+{{ block content }}
+
+    I will refer to you as person B and your partner as person A.
+    Both you and your partner receive the same information below about the game.
+
+<br>
+<br>
+
+    Person A first receives 5 tokens while person B receives nothing.
+    Person A may send some, none, or all of this amount to person B.
+    Any amount they do not send is theirs to keep. Any amount they do send to person B is tripled.
+    For example, if person A sends 2 tokens then person B will receive 6 tokens.
+    After person A makes a decision, the game is over.
+
+<br>
+<br>
+    Person A's earnings from this round are the tokens they do not send.
+    Person B's earnings equal the tokens they receive.
+
+<br>
+<br>
+    The game is shown in the below diagram.
+<br>
+<br>
+    <img src="{{ static 'game/Dictator_game.png'}}" style="width: 100%;"/>
+
+<br>
+<br>
+    Soon you will be matched with your partner for this stage and begin the game.
+    However, before doing so, we need to check your comprehension of the game. Click next to proceed.
+<br>
+<br>
+
+    {{ next_button }}
+{{ endblock }}
+
+
