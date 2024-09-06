@@ -1,0 +1,22 @@
+{{ block title }}
+
+{{ endblock }}
+
+{{ block content }}
+
+You have been given 4 tokens. How many would you like to send to your partner? {{ if player.participant.know == 1 }}Recall that your partner is {{ partner }} and knows
+that you are {{you}}. {{endif}}
+<br>
+<br>
+Please type your answer in the box below. You may only send whole tokens (i.e. you cannot send half a token).
+<br>
+<br>
+{{form.dictator}}
+
+<br>
+<br>
+
+{{ next_button }}
+
+
+{{ endblock}}

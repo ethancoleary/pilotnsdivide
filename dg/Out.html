@@ -1,0 +1,19 @@
+{{ block title }}
+    Stage {{ round }} complete
+{{ endblock }}
+
+{{ block content }}
+
+   {{ if player.participant.tgfirst == 0 }}Thank you, you've now completed stage 1.
+    When you click 'next' you will move on to stage 2.{{endif}}
+    {{ if player.participant.tgfirst == 1 }}Thank you, you've now completed stage 2.
+In the next 3 slides, we have some final questions for you which will only take
+1-2 minutes to complete.{{endif}}
+
+<br>
+<br>
+
+    {{ next_button }}
+{{ endblock }}
+
+

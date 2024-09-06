@@ -3,22 +3,24 @@
 {{ endblock }}
 {{ block content }}
 
-    In each stage you will be paired with an individual, call them your partner.
-
+    For the next two stages you will play with another individual, call them your partner.
+    You and your partner will interact and make decisions which will
+    affect how many tokens you each earn. Each token has a real cash value of £2.00.
 <br>
 <br>
-
-    In the next two stages, you and your partner will interact and make decisions which will
-    affect how many tokens you each earn. Tokens have a real cash value where one token is equal to £0.20.
-    Both you and your partner will be paid for only one of the two stages chosen randomly.
+    Both you and your partner will be paid for <b>only one of the two stages</b> chosen randomly.
     It may be that you and your partner are paid for different stages.
 
 <br>
 <br>
+    <b>Your partner is someone who was born in and still lives in England. Specifically,{{ if player.participant.know == 1}} they are {{ partner }} and
+know that you are {{ you }}{{ endif}}{{ if player.participant.know == 0 }} either a Northerner or Southerner with equal chance{{endif}}.</b>
 
 
 
-    Click on the next button to begin stage 1.
+<br>
+<br>
+    Click 'next' to begin stage 1.
 
 <br>
 <br>

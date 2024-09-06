@@ -3,7 +3,8 @@ Welcome
 {{ endblock }}
 {{ block content }}
 <pr>
-    Thank you for taking part in this experiment. During the next 5 minutes, you will make decisions in 2 rounds.
+    Thank you for taking part in this experiment. During the next 5-7 minutes, you will make decisions in 2 rounds.
+    In participating, you will receive a participation fee of £1.00 and have the opportunity to earn a bonus of up to £12.00 depending on your decisions and the decisions of another randomly chosen individual.
 </pr>
 <br>
 <br>
@@ -11,7 +12,7 @@ Welcome
 <p>
     All data collected in this experiment is anonymized. Only anonymous data may be shared in open-source
     science repositories. At any point in the experiment, you may opt out and return your submission. Incomplete
-    experiments will be discarded before analysis.
+    experiments will be discarded before analysis. Incomplete submissions will not receive payment.
 </p>
 <p>
     All information in this experiment referring to other participants is true and relates to real human participants.
@@ -32,6 +33,9 @@ Welcome
 <br>
     <input type="checkbox" style="margin-right: 10px;" name="consent" value=1><b>I agree to participating in this
     experiment and understand how the data I provide will be used.</b>
+<br>
+<br>
+{{ formfield_errors 'consent' }}
 <br>
 <br>
 

@@ -26,34 +26,31 @@ class Player(BasePlayer):
     consent = models.IntegerField(initial=0)
     age = models.IntegerField(
         choices=[
-            [1, '<20 years'],
-            [2, '20-29 years'],
-            [3, '30-39 years'],
-            [4, '40-49 years'],
-            [5, '50-59 years'],
-            [6, '60-69 years'],
-            [7, '70 years and over']
+            [1, 'Younger than 20 years'],
+            [2, '20-39 years'],
+            [3, '40-59 years'],
+            [4, '60 years and over']
         ],
     )
     education = models.IntegerField(
         choices=[
-            [1, 'Less than 5 GCSEs (or equivalent)'],
-            [2, '5 or more GCSEs or equivalent (level 2) apprenticeship'],
-            [3, 'A levels or equivalent (level 3) apprenticeship'],
-            [4, 'Foundation degree or equivalent (level 4/5) apprenticeship'],
-            [5, 'Undergraduate degree or equivalent level 6 apprenticeship'],
-            [6, 'Master degree or equivalent level 7 apprenticeship'],
-            [7, 'Doctoral degree']
-        ]
+            [1, 'GCSEs/O-Levels or equivalent'],
+            [2, 'A-Levels or equivalent'],
+            [3, 'Undergraduate degree or equivalent'],
+            [4, 'Postgraduate degree or equivalent'],
+            [5, 'PhD']
+        ],
     )
-    accepted = models.IntegerField(initial=0)
+    accepted = models.IntegerField(initial=1)
     english_by_birth = models.IntegerField(
+        initial=1,
         choices =[
             [1, 'Yes'],
             [2, 'No'],
         ]
     )
     region_of_birth = models.IntegerField(
+        initial = 4,
         choices=[
             [1, 'East of England'],
             [2, 'East Midlands'],
@@ -66,12 +63,14 @@ class Player(BasePlayer):
         ]
     )
     currently_live_in_england = models.IntegerField(
+        initial = 1,
         choices=[
             [1, 'Yes'],
             [2, 'No'],
         ]
     )
     region_of_domicile = models.IntegerField(
+        initial=4,
         choices=[
             [1, 'East of England'],
             [2, 'East Midlands'],
@@ -84,6 +83,7 @@ class Player(BasePlayer):
         ]
     )
     regional_identity = models.IntegerField(
+        initial=2,
         choices=[
             [1, 'Midlander'],
             [2, 'Northerner'],
@@ -91,7 +91,7 @@ class Player(BasePlayer):
             [4, 'None of the above']
         ]
     )
-    northern = models.IntegerField(initial=0)
+    northern = models.IntegerField(initial=1)
     southern = models.IntegerField(initial=0)
 
 # PAGES
@@ -211,13 +211,20 @@ class Accepted(Page):
         participant = player.participant
 
         if player.southern == 1:
-            participant.group = 0
+            participant.northern = 0
         if player.northern == 1:
-            participant.group = 1
+            participant.northern = 1
 
-        participant.ingroup = random.randint(0, 1)
 
-        participant.order = random.randint(0,1)
+
+        participant.ingroup = random.randint(0, 2)
+
+        if participant.ingroup == 2:
+            participant.know = 0
+        else:
+            participant.know = 1
+
+        participant.tgfirst = random.randint(0,1)
 
 class Outro(Page):
 
@@ -226,13 +233,39 @@ class Outro(Page):
         return player.accepted == 1
 
     @staticmethod
+    def vars_for_template(player):
+        if player.participant.northern == 1 and player.participant.ingroup == 1:
+            partner = "a Northerner"
+            you = "also a Northerner"
+        elif player.participant.northern == 0 and player.participant.ingroup == 0:
+            partner = " a Northerner"
+            you = "a Southerner"
+        elif player.participant.northern == 1 and player.participant.ingroup == 0:
+            partner = "a Southerner"
+            you = "a Northerner"
+        elif player.participant.northern == 0 and player.participant.ingroup == 1:
+            partner = "a Southerner"
+            you = "also a Southerner"
+        else:
+            partner = ""
+            you = ""
+
+        return {
+            'partner': partner,
+            'you': you
+        }
+
+    @staticmethod
     def app_after_this_page(player, upcoming_apps):
 
-        if player.participant.order == 0:
-            return "trustee"
-        if player.participant.order == 1:
-            return "recipient"
+        if player.participant.tgfirst == 1:
+            return "tg"
+        if player.participant.tgfirst == 0:
+            return "dg"
 
 
 
-page_sequence = [Intro, English, Birth, EnglandLive, Domicile, Identity, Other, Unsuccessful, Accepted, Outro]
+page_sequence = [Intro,
+                #English, Birth, EnglandLive, Domicile, Identity,
+                Other,
+                 Unsuccessful, Accepted, Outro]

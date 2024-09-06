@@ -5,8 +5,8 @@ SESSION_CONFIGS = [
         name='Main',
         app_sequence=[
             'intro',
-            'trustee',
-            'recipient',
+            'tg',
+             'dg','tg2',
             'outro'
         ],
         num_demo_participants=5
@@ -23,14 +23,15 @@ SESSION_CONFIG_DEFAULTS = dict(
 )
 
 PARTICIPANT_FIELDS = [
-    'group',
+    'northern',
     'ingroup',
     'return1',
     'return2',
     'return3',
     'return4',
     'return5',
-    'order'
+    'tgfirst',
+    'know'
 ]
 SESSION_FIELDS = []
 

@@ -1,0 +1,91 @@
+{{ block title }}
+    Final Survey (Page 1 of 3)
+{{ endblock }}
+{{ block content }}
+<pr>
+    Thank you for completing the two stages, we now have a few final questions we wish to ask you before you finish.
+</pr>
+<br> <br>
+<pr>
+What is your employment status?
+</pr>
+<br>
+{{ form.profession }}
+<br>
+<br>
+<pr>
+    How many children do you have?
+</pr>
+<br>
+{{ form.children }}
+<br>
+<br>
+Please indicate to what extent you agree with the following statements where
+<b>1 means you strongly disagree</b> and <b>7 means you strongly agree</b>.
+<br>
+<br>
+
+<form method="post">
+
+    <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+
+
+
+        <!-- Table Header -->
+        <thead>
+        <tr>
+            <td style="width: 44%;"></td> <!-- Empty cell for alignment with statements -->
+            <td colspan="3" style="text-align: left; padding-left: 20px; background-color: #f0f0f0; width: 24%;">Strongly Disagree</td>
+            <td style="text-align: left; padding-left: 20px; background-color: #f0f0f0; width: 8%;"></td>
+            <td colspan="3" style="text-align: right; padding-right: 20px; background-color: #f0f0f0; width: 24%;">Strongly Agree</td>
+        </tr>
+            <tr>
+                <th style="text-align: left; padding: 5px; width: 44%;">Statement</th>
+                <th style="text-align: center; padding: 5px; background-color: #f0f0f0; width: 8%;">1</th>
+                <th style="text-align: center; padding: 5px; background-color: #f0f0f0; width: 8%;">2</th>
+                <th style="text-align: center; padding: 5px; background-color: #f0f0f0; width: 8%;">3</th>
+                <th style="text-align: center; padding: 5px; background-color: #f0f0f0; width: 8%;">4</th>
+                <th style="text-align: center; padding: 5px; background-color: #f0f0f0; width: 8%;">5</th>
+                <th style="text-align: center; padding: 5px; background-color: #f0f0f0; width: 8%;">6</th>
+                <th style="text-align: center; padding: 5px; background-color: #f0f0f0; width: 8%;">7</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Loop through each question and create a row -->
+            {% for question in questions %}
+            <tr>
+                <td style="padding: 5px; width: 44%;">{{ question.statement }}</td>
+                <!-- Radio buttons for the question -->
+                <td style="text-align: center; padding: 5px; background-color: #f0f0f0; width: 8%;">
+                    <input type="radio" name="{{ question.field }}" value="1" id="{{ question.field }}_1">
+                </td>
+                <td style="text-align: center; padding: 5px; background-color: #f0f0f0; width: 8%;">
+                    <input type="radio" name="{{ question.field }}" value="2" id="{{ question.field }}_2">
+                </td>
+                <td style="text-align: center; padding: 5px; background-color: #f0f0f0; width: 8%;">
+                    <input type="radio" name="{{ question.field }}" value="3" id="{{ question.field }}_3">
+                </td>
+                <td style="text-align: center; padding: 5px; background-color: #f0f0f0; width: 8%;">
+                    <input type="radio" name="{{ question.field }}" value="4" id="{{ question.field }}_4">
+                </td>
+                <td style="text-align: center; padding: 5px; background-color: #f0f0f0; width: 8%;">
+                    <input type="radio" name="{{ question.field }}" value="5" id="{{ question.field }}_5">
+                </td>
+                <td style="text-align: center; padding: 5px; background-color: #f0f0f0; width: 8%;">
+                    <input type="radio" name="{{ question.field }}" value="6" id="{{ question.field }}_6">
+                </td>
+                <td style="text-align: center; padding: 5px; background-color: #f0f0f0; width: 8%;">
+                    <input type="radio" name="{{ question.field }}" value="7" id="{{ question.field }}_7">
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+    <br>
+    <button type="submit">Submit</button>
+</form>
+
+
+{{ endblock }}

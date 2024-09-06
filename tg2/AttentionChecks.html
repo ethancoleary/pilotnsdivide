@@ -1,0 +1,56 @@
+{{ block title }}
+Comprehension Checks
+{{ endblock }}
+
+{{ block content }}
+1: How many tokens will your partner receive at the beginning of the game?
+<br>
+<br>
+<center>
+
+        {{ form.check1 }}
+
+    </center>
+<br>
+<br>
+2: If your partner sends you no tokens, what will be your bonus payment for this stage?
+<br>
+<br>
+<center>
+
+        {{ form.check2 }}
+
+    </center>
+<br>
+<br>
+3: If your partner sends you 2 tokens, how many will you receive?
+<br>
+<br>
+<center>
+
+        {{ form.check3 }}
+
+    </center>
+<br>
+<br>
+4: If your partner sends you 1 token and you return 2 back to them,
+what will be the cash bonus payment for you and your partner in this stage?
+<br>
+<br>
+<center>
+    You:
+    {{ form.check4 }}
+        <br><br>
+
+       Your partner:
+
+
+        {{ form.check5 }}
+
+<br>
+</center>
+<br>
+
+    {{ next_button }}
+
+{{ endblock}}

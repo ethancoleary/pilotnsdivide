@@ -1,0 +1,62 @@
+{{ block title }}
+    Final Survey (Page 2 of 3)
+{{ endblock }}
+{{ block content }}
+<pr>
+    Imagine the two circles in each of the images below to represent you and your partner.
+    Please select the picture below which best describes your
+    relationship with your partner in this experiment.
+
+    <br><br>
+
+<form method="post">
+    <div style="display: flex; justify-content: space-around; align-items: center;">
+        <!-- Image 1 -->
+        <div style="text-align: center;">
+            <img src="{{ static 'game/circles1.png' }}" alt="Circles 1" style="max-width: 100px;">
+            <br>
+            <input type="radio" name="socialcloseness" value="1" id="image1">
+            <label for="image1">1</label>
+        </div>
+
+        <!-- Image 2 -->
+        <div style="text-align: center;">
+            <img src="{{ static 'game/circles2.png' }}" alt="Circles 2" style="max-width: 100px;">
+            <br>
+            <input type="radio" name="socialcloseness" value="2" id="image2">
+            <label for="image2">2</label>
+        </div>
+
+        <!-- Image 3 -->
+        <div style="text-align: center;">
+            <img src="{{ static 'game/circles3.png' }}" alt="Circles 3" style="max-width: 100px;">
+            <br>
+            <input type="radio" name="socialcloseness" value="3" id="image3">
+            <label for="image3">3</label>
+        </div>
+
+        <!-- Image 4 -->
+        <div style="text-align: center;">
+            <img src="{{ static 'game/circles4.png' }}" alt="Circles 4" style="max-width: 100px;">
+            <br>
+            <input type="radio" name="socialcloseness" value="4" id="image4">
+            <label for="image4">4</label>
+        </div>
+
+        <!-- Image 5 -->
+        <div style="text-align: center;">
+            <img src="{{ static 'game/circles5.png' }}" alt="Circles 5" style="max-width: 100px;">
+            <br>
+            <input type="radio" name="socialcloseness" value="5" id="image5">
+            <label for="image5">5</label>
+        </div>
+    </div>
+
+    <br>
+    <div style="text-align: center;">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+
+
+{{ endblock }}

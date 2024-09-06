@@ -1,0 +1,54 @@
+{{ block title }}
+    Stage {{ round }}
+{{ endblock }}
+
+{{ block content }}
+
+Both you and your partner receive the same information below about the game.
+
+<br>
+<br>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .grey-box {
+            background-color: #f0f0f0; /* Light grey background */
+            padding: 15px;            /* Add some padding */
+            border-radius: 5px;        /* Slightly rounded corners */
+            border: 1px solid #ccc;    /* Optional: Light border */
+        }
+    </style>
+</head>
+<body>
+
+<div class="grey-box">
+    <h3>The game</h3>
+<br>
+Person A first receives 4 tokens, each worth £2.00, while person B receives nothing.
+    Person A may send some, none, or all of their tokens to person B.
+    <br>
+    <br>
+    Person A's earnings from this round are the tokens they do not send.
+    Person B's earnings equal the tokens they receive.
+</div>
+<br>
+<br>
+You have been assigned to the role of <b>person A</b> in this stage.
+    The below diagram shows how you and your partner will play the game
+<br>
+<br>
+<center>
+    <img src="{{ static 'game/DG4token.png'}}" style="width: 100%;"/>
+</center>
+<br>
+<br>
+    Soon you will begin the game.
+    However, before doing so, we need to check your comprehension of the game. Click next to proceed.
+<br>
+<br>
+
+    {{ next_button }}
+{{ endblock }}
+
+
