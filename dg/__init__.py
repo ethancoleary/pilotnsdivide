@@ -22,7 +22,16 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    dictator = models.IntegerField()
+    dictator = models.IntegerField(
+        choices = [
+            [1, '0'],
+            [2, '1'],
+            [3, '2'],
+            [4, '3'],
+            [5, '4']
+        ],
+        widget=widgets.RadioSelect
+    )
     # Question 1: How many tokens will you receive at the beginning of the game?
     check1 = models.IntegerField(
         choices=[

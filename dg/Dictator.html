@@ -4,11 +4,11 @@
 
 {{ block content }}
 
-You have been given 4 tokens. How many would you like to send to your partner? {{ if player.participant.know == 1 }}Recall that your partner is {{ partner }} and knows
+You have been given 4 tokens each worth £2.00. Your partner has not been given any. {{ if player.participant.know == 1 }}Recall that your partner is {{ partner }} and knows
 that you are {{you}}. {{endif}}
 <br>
 <br>
-Please type your answer in the box below. You may only send whole tokens (i.e. you cannot send half a token).
+How many of your tokens would you like to send to your partner?
 <br>
 <br>
 {{form.dictator}}
