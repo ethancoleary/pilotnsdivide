@@ -4,10 +4,34 @@
 {{ block content }}
 <pr>
     Once again, thank you for taking part in this experiment.
-    You have earned a participation fee of £0.70 and you will receive your bonus in due course
-    and you will be notified when this occurs.
+    You have earned a participation fee of £1.00.
 </pr>
 <br> <br>
+You will also receive a bonus for your decision in stage {{ participant.paymentstage }}.
+
+{{ if participant.paymentstage == 1 }}
+{{if participant.tgfirst == 1 }}
+This means that if your partner sends you 1 token, you will earn £{{ earnings1 }}.00 as a bonus.
+If they send you 2 tokens, your bonus will be £{{earnings2}}.00 and if they send you 3 tokens, your bonus will be £{{earnings3}}.00.
+Once your partner has made their decision we will pay you your bonus.
+{{endif}}
+{{ if participant.tgfirst == 0}}
+This means that you will earn a bonus of £{{earnings}}.00.
+{{ endif }}
+{{endif}}
+
+{{ if participant.paymentstage == 2 }}
+{{if participant.tgfirst == 0 }}
+This means that if your partner sends you 1 token, you will earn £{{ earnings1 }}.00 as a bonus.
+If they send you 2 tokens, your bonus will be £{{earnings2}}.00 and if they send you 3 tokens, your bonus will be £{{earnings3}}.00.
+Once your partner has made their decision we will pay you your bonus.
+{{endif}}
+{{ if participant.tgfirst == 1}}
+This means that you will earn a bonus of £{{earnings}}.00.
+{{ endif }}
+{{endif}}
+<br><br>
+
 <pr>
 If you have any feedback for the experimental procedure then please provide it below.
 </pr>

@@ -10,7 +10,30 @@
 <pr>
     Unfortunately the responses you have given make you ineligible for this study or
     we have reached participant capacity for your category.
-    Thank you for your interest. You may now close this browser window.
+    Thank you for your interest.
+<br><br>
+<p>
+    You will receive £0.10 for your time and will now be redirected automatically redirected to Prolific. If this hasn't happened yet, click
+    <a href={{link}}>here</a>
+</p>
+
+<script>
+    function Redirect() {
+        window.location.href = "{{link}}";
+    }
+    function onPageLoad() {
+        setTimeout(() => {
+            Redirect()
+        }, 2000)
+    }
+
+     window.onload = onPageLoad;
+</script>
+{{ endblock }}
+
+
+
+
 </pr>
 
 {{ endblock }}

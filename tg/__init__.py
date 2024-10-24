@@ -12,7 +12,7 @@ class C(BaseConstants):
     NAME_IN_URL = 'trustee'
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
-    CORRECT_ANSWERS = [3, 1, 5, 2, 4]
+    CORRECT_ANSWERS = [4, 1, 5, 2, 5]
 
 
 class Subsession(BaseSubsession):
@@ -80,7 +80,7 @@ class Player(BasePlayer):
     )
 
     return1 = models.IntegerField(
-        widget = widgets.RadioSelect,
+
         choices = [
             [0, '0'],
             [1, '1'],
@@ -89,7 +89,7 @@ class Player(BasePlayer):
         ]
     )
     return2 = models.IntegerField(
-        widget=widgets.RadioSelect,
+
         choices=[
             [0, '0'],
             [1, '1'],
@@ -98,6 +98,21 @@ class Player(BasePlayer):
             [4, '4'],
             [5, '5'],
             [6, '6']
+        ]
+    )
+    return3 = models.IntegerField(
+
+        choices=[
+            [0, '0'],
+            [1, '1'],
+            [2, '2'],
+            [3, '3'],
+            [4, '4'],
+            [5, '5'],
+            [6, '6'],
+            [7, '7'],
+            [8, '8'],
+            [9, '9']
         ]
     )
 
@@ -118,96 +133,18 @@ class AttentionChecks(Page):
         if values['check1'] != C.CORRECT_ANSWERS[0] or values['check2'] != C.CORRECT_ANSWERS[1] or values['check3'] != \
                 C.CORRECT_ANSWERS[2] or values['check4'] != C.CORRECT_ANSWERS[3] or values['check5'] != C.CORRECT_ANSWERS[4]:
             return (
-                'At least one of your answers is incorrect. Recall, your partner receives 2 tokens at the start of the stage; you receive nothing.'
+                'At least one of your answers is incorrect. Recall, your partner receives 3 tokens at the start of the stage; you receive nothing.'
                 ' Any token amount sent to you is tripled. Please try again.')
 
-class Trustee0(Page):
-    @staticmethod
-    def vars_for_template(player):
-        if player.participant.northern == 1 and player.participant.ingroup == 1:
-            partner = "a Northerner"
-            you = "also a Northerner"
-        elif player.participant.northern == 0 and player.participant.ingroup == 0:
-            partner = " a Northerner"
-            you = "a Southerner"
-        elif player.participant.northern == 1 and player.participant.ingroup == 0:
-            partner = "a Southerner"
-            you = "a Northerner"
-        elif player.participant.northern == 0 and player.participant.ingroup == 1:
-            partner = "a Southerner"
-            you = "also a Southerner"
-        else:
-            partner = ""
-            you = ""
-
-        return {
-            'partner': partner,
-            'you': you
-        }
-class Trustee1(Page):
+class Trustee(Page):
     form_model = 'player'
-    form_fields = ['return1']
-
-    @staticmethod
-    def vars_for_template(player):
-        if player.participant.northern == 1 and player.participant.ingroup == 1:
-            partner = "a Northerner"
-            you = "also a Northerner"
-        elif player.participant.northern == 0 and player.participant.ingroup == 0:
-            partner = " a Northerner"
-            you = "a Southerner"
-        elif player.participant.northern == 1 and player.participant.ingroup == 0:
-            partner = "a Southerner"
-            you = "a Northerner"
-        elif player.participant.northern == 0 and player.participant.ingroup == 1:
-            partner = "a Southerner"
-            you = "also a Southerner"
-        else:
-            partner = ""
-            you = ""
-
-        return {
-            'partner': partner,
-            'you': you
-        }
-
+    form_fields = ['return1', 'return2', 'return3']
     @staticmethod
     def before_next_page(player, timeout_happened):
         participant = player.participant
         participant.return1 = player.return1
-
-
-class Trustee2(Page):
-    form_model = 'player'
-    form_fields = ['return2']
-
-    @staticmethod
-    def vars_for_template(player):
-        if player.participant.northern == 1 and player.participant.ingroup == 1:
-            partner = "a Northerner"
-            you = "also a Northerner"
-        elif player.participant.northern == 0 and player.participant.ingroup == 0:
-            partner = " a Northerner"
-            you = "a Southerner"
-        elif player.participant.northern == 1 and player.participant.ingroup == 0:
-            partner = "a Southerner"
-            you = "a Northerner"
-        elif player.participant.northern == 0 and player.participant.ingroup == 1:
-            partner = "a Southerner"
-            you = "also a Southerner"
-        else:
-            partner = ""
-            you = ""
-
-        return {
-            'partner': partner,
-            'you': you
-        }
-
-    @staticmethod
-    def before_next_page(player, timeout_happened):
-        participant = player.participant
         participant.return2 = player.return2
+        participant.return3 = player.return3
 
 
 
@@ -224,7 +161,7 @@ class Out(Page):
         }
 
 page_sequence = [StageOneIntro,
-                 AttentionChecks,
-                 Trustee0, Trustee1, Trustee2,
+                 #AttentionChecks,
+                 Trustee,
                  Out]
 

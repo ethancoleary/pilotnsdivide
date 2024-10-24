@@ -12,14 +12,8 @@ class C(BaseConstants):
     NAME_IN_URL = 'workshop_overview_app'
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
-    MAX_NORTHERN = 30
-    MAX_SOUTHERN = 30
-    MAX_NN = 1
-    MAX_SS = 1
-    MAX_NS = 1
-    MAX_SN = 10
-    MAX_NU = 1
-    MAX_SU = 10
+    MAX_NORTHERN = 10
+    MAX_SOUTHERN = 10
 
 
 class Subsession(BaseSubsession):
@@ -51,14 +45,12 @@ class Player(BasePlayer):
     )
     accepted = models.IntegerField(initial=1)
     english_by_birth = models.IntegerField(
-        initial=1,
         choices =[
             [1, 'Yes'],
             [2, 'No'],
         ]
     )
     region_of_birth = models.IntegerField(
-        initial = 4,
         choices=[
             [1, 'East of England'],
             [2, 'East Midlands'],
@@ -67,11 +59,11 @@ class Player(BasePlayer):
             [5, 'North West'],
             [6, 'South East'],
             [7, 'South West'],
-            [8, 'Yorkshire and the Humber'],
+            [8, 'West Midlands'],
+            [9, 'Yorkshire and the Humber'],
         ]
     )
     currently_live_in_england = models.IntegerField(
-        initial = 1,
         choices=[
             [1, 'Yes'],
             [2, 'No'],
@@ -86,7 +78,6 @@ class Player(BasePlayer):
         ]
     )
     region_of_domicile = models.IntegerField(
-        initial=4,
         choices=[
             [1, 'East of England'],
             [2, 'East Midlands'],
@@ -95,11 +86,11 @@ class Player(BasePlayer):
             [5, 'North West'],
             [6, 'South East'],
             [7, 'South West'],
-            [8, 'Yorkshire and the Humber']
+            [8, 'West Midlands'],
+            [9, 'Yorkshire and the Humber'],
         ]
     )
     regional_identity = models.IntegerField(
-        initial=2,
         choices=[
             [1, 'Midlander'],
             [2, 'Northerner'],
@@ -107,9 +98,8 @@ class Player(BasePlayer):
             [4, 'None of the above']
         ]
     )
-    northern = models.IntegerField(initial=1)
+    northern = models.IntegerField(initial=0)  # Initialize as 0
     southern = models.IntegerField(initial=0)
-    ingroup = models.IntegerField(initial=0)
 
 # PAGES
 class Intro(Page):
@@ -143,7 +133,7 @@ class Birth(Page):
 
     @staticmethod
     def before_next_page(player, timeout_happened):
-        if player.region_of_birth >2:
+        if player.region_of_birth !=2 and player.region_of_birth!=8:
             player.accepted = 1
         else:
             player.accepted = 0
@@ -173,18 +163,16 @@ class Domicile(Page):
 
     @staticmethod
     def before_next_page(player, timeout_happened):
-        if player.region_of_birth == 3 or player.region_of_birth == 6 or player.region_of_birth ==7 :
-            if player.region_of_domicile == 3 or player.region_of_domicile == 6 or player.region_of_domicile == 7:
+        if player.region_of_birth == 1 or player.region_of_birth == 3 or player.region_of_birth == 6 or player.region_of_birth ==7 :
+            if player.region_of_domicile == 1 or player.region_of_domicile == 3 or player.region_of_domicile == 6 or player.region_of_domicile == 7:
                 player.southern = 1
-                player.northern = 0
+                player.accepted = 1
 
-        if player.region_of_birth == 4 or player.region_of_birth == 5 or player.region_of_birth == 8 :
-            if player.region_of_domicile == 4 or player.region_of_domicile == 5 or player.region_of_domicile == 8:
+        elif player.region_of_birth == 4 or player.region_of_birth == 5 or player.region_of_birth == 9 :
+            if player.region_of_domicile == 4 or player.region_of_domicile == 5 or player.region_of_domicile == 9:
                 player.northern = 1
-                player.southern = 0
+                player.accepted = 1
 
-        if player.southern + player.northern > 0:
-            player.accepted = 1
         else:
             player.accepted = 0
 
@@ -209,14 +197,14 @@ class Identity(Page):
         all_players = player.subsession.get_players()
 
         admitted_northern = len([p for p in all_players if p.northern == 1 and p.accepted == 1])
-        admitted_southern = len([p for p in all_players if p.northern == 0 and p.accepted == 1])
+        admitted_southern = len([p for p in all_players if p.southern == 1 and p.accepted == 1])
 
         print(f"Admitted Northern: {admitted_northern}")
         print(f"Admitted Southern: {admitted_southern}")
 
         if player.northern == 1 and player.accepted == 1 and admitted_northern <= C.MAX_NORTHERN:
             player.accepted = 1
-        elif player.northern == 0 and player.accepted == 1 and admitted_southern <= C.MAX_SOUTHERN:
+        elif player.southern == 1 and player.accepted == 1 and admitted_southern <= C.MAX_SOUTHERN:
             player.accepted = 1
         else:
             player.accepted = 0
@@ -239,67 +227,30 @@ class Other(Page):
         if player.northern == 1:
             participant.northern = 1
 
-        all_players = player.subsession.get_players()
-
-        # Separate participants by region (Northern or Southern)
-        northern_players = [p for p in all_players if p.northern == 1 and p.accepted == 1]
-        southern_players = [p for p in all_players if p.northern == 0 and p.accepted == 1]
-
-        # Count how many Northern participants are in each treatment group (ingroup 0, 1, or 2)
-        northern_group_1_count = len([p for p in northern_players if p.ingroup == 1])
-        northern_group_2_count = len([p for p in northern_players if p.ingroup == 2])
-        northern_group_3_count = len([p for p in northern_players if p.ingroup == 3])
-
-        # Count how many Southern participants are in each treatment group (ingroup 0, 1, or 2)
-        southern_group_1_count = len([p for p in southern_players if p.ingroup == 1])
-        southern_group_2_count = len([p for p in southern_players if p.ingroup == 2])
-        southern_group_3_count = len([p for p in southern_players if p.ingroup == 3])
-
-        # Initialize an empty list for available groups
-        available_groups = []
-
-        # Randomly assign Northern participants to available groups
-        if participant.northern == 1:
-            if northern_group_1_count < C.MAX_NS:
-                available_groups.append(1)
-            if northern_group_2_count < C.MAX_NN:
-                available_groups.append(2)
-            if northern_group_3_count < C.MAX_NU:
-                available_groups.append(3)
-
-        # Randomly assign Southern participants to available groups
-        elif participant.northern == 0:  # Southern
-            if southern_group_1_count < C.MAX_SN:
-                available_groups.append(1)
-            if southern_group_2_count < C.MAX_SS:
-                available_groups.append(2)
-            if southern_group_3_count < C.MAX_SU:
-                available_groups.append(3)
-
-        # If there are available groups, randomly assign the participant to one
-        if available_groups:
-            player.ingroup = random.choice(available_groups)
-            player.participant.ingroup = player.ingroup - 1
-
-            if participant.ingroup == 2:
-                participant.know = 0
-            else:
-                participant.know = 1
-
-            participant.tgfirst = random.randint(0, 1)
-        else:
-            player.accepted = 0
 
 class Unsuccessful(Page):
 
     @staticmethod
     def is_displayed(player):
         return player.accepted == 0
+
+    @staticmethod
+    def vars_for_template(player): ## Need a code here that's different to the one they use when they finish.
+        code = player.session.config['completion_code']
+        link = f"https://app.prolific.co/submissions/complete?cc={code}"
+
+        return dict(
+            link=link,
+        )
+
 class Accepted(Page):
 
     @staticmethod
     def is_displayed(player):
         return player.accepted == 1
+
+    def before_next_page(player, timeout_happened):
+        player.participant.tgfirst = random.randint(0,1)
 
 
 
@@ -311,28 +262,7 @@ class Outro(Page):
     def is_displayed(player):
         return player.accepted == 1
 
-    @staticmethod
-    def vars_for_template(player):
-        if player.participant.northern == 1 and player.participant.ingroup == 1:
-            partner = "a Northerner"
-            you = "also a Northerner"
-        elif player.participant.northern == 0 and player.participant.ingroup == 0:
-            partner = " a Northerner"
-            you = "a Southerner"
-        elif player.participant.northern == 1 and player.participant.ingroup == 0:
-            partner = "a Southerner"
-            you = "a Northerner"
-        elif player.participant.northern == 0 and player.participant.ingroup == 1:
-            partner = "a Southerner"
-            you = "also a Southerner"
-        else:
-            partner = ""
-            you = ""
 
-        return {
-            'partner': partner,
-            'you': you
-        }
 
     @staticmethod
     def app_after_this_page(player, upcoming_apps):
@@ -345,7 +275,7 @@ class Outro(Page):
 
 
 page_sequence = [Intro,
-                #English, Birth, EnglandLive, Domicile,
+                English, Birth, EnglandLive, Domicile,
                 Identity,
                 Other,
                  Unsuccessful, Accepted, Outro]

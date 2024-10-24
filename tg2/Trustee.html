@@ -1,0 +1,80 @@
+{{ block title }}
+{{ endblock }}
+
+{{ block content }}
+
+<p>You need to now decide how many tokens you will return in each possible scenario of this game.
+Your partner will choose an amount to send to you, and then your decision for that specific amount will be used
+to determine your payment for this stage.</p>
+
+<p>Recall that your partner is either a Northerner or a Southerner with equal chance.</p>
+
+<!-- Section 1: Partner sends 1 token -->
+<!-- Section 1: Partner sends 1 token -->
+<div id="section1">
+    <b>Suppose your partner sends you 1 token and accordingly you receive 3 tokens.</b><br>
+    How many tokens would you like to return in this scenario?
+    <br><br>
+    {{ form.return1 }}
+    <br><br>
+</div>
+
+<!-- Section 2: Partner sends 2 tokens (Initially hidden) -->
+<div id="section2" style="display:none;">
+    <b>Suppose your partner sends you 2 tokens and accordingly you receive 6 tokens.</b><br>
+    How many tokens would you like to return in this scenario?
+    <br><br>
+    {{ form.return2 }}
+    <br><br>
+</div>
+
+<!-- Section 3: Partner sends 3 tokens (Initially hidden) -->
+<div id="section3" style="display:none;">
+    <b>Suppose your partner sends you 3 tokens and accordingly you receive 9 tokens.</b><br>
+    How many tokens would you like to return in this scenario?
+    <br><br>
+    {{ form.return3 }}
+    <br><br>
+</div>
+
+<!-- Static Message (Initially hidden) -->
+<div id="staticMessage" style="display:none; font-weight:bold;">
+    You may now check your responses and click on next to continue.
+    <br><br>
+</div>
+
+<!-- Next button (Initially hidden) -->
+<div id="nextButton" style="display:none;">
+    {{ next_button }}
+</div>
+
+<script>
+    // Wait for the DOM to load
+    document.addEventListener("DOMContentLoaded", function() {
+
+        // Listen for changes on return1 dropdown
+        document.querySelector('select[name="return1"]').addEventListener('change', function() {
+            // Show section2 when a value is selected in return1
+            document.getElementById('section2').style.display = 'block';
+        });
+
+        // Listen for changes on return2 dropdown
+        document.querySelector('select[name="return2"]').addEventListener('change', function() {
+            // Show section3 when a value is selected in return2
+            document.getElementById('section3').style.display = 'block';
+        });
+
+        // Listen for changes on return3 dropdown
+        document.querySelector('select[name="return3"]').addEventListener('change', function() {
+            // Show the static message and the next button when return3 is selected
+            document.getElementById('staticMessage').style.display = 'block';
+            document.getElementById('nextButton').style.display = 'block';
+        });
+    });
+</script>
+
+
+
+{{ endblock }}
+
+

@@ -10,7 +10,7 @@ class C(BaseConstants):
     NAME_IN_URL = 'recipient'
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
-    CORRECT_ANSWERS = [3,1,2,3]
+    CORRECT_ANSWERS = [4,1,3,3]
 
 
 class Subsession(BaseSubsession):
@@ -24,13 +24,13 @@ class Group(BaseGroup):
 class Player(BasePlayer):
     dictator = models.IntegerField(
         choices = [
-            [1, '0'],
-            [2, '1'],
-            [3, '2'],
-            [4, '3'],
-            [5, '4']
-        ],
-        widget=widgets.RadioSelect
+            [0, '0'],
+            [1, '1'],
+            [2, '2'],
+            [3, '3'],
+            [4, '4'],
+            [5,'5']
+        ]
     )
     # Question 1: How many tokens will you receive at the beginning of the game?
     check1 = models.IntegerField(
@@ -109,28 +109,10 @@ class Dictator(Page):
     form_model = 'player'
     form_fields = ['dictator']
 
-    @staticmethod
-    def vars_for_template(player):
-        if player.participant.northern == 1 and player.participant.ingroup == 1:
-            partner = "a Northerner"
-            you = "also a Northerner"
-        elif player.participant.northern == 0 and player.participant.ingroup == 0:
-            partner = "a Northerner"
-            you = "a Southerner"
-        elif player.participant.northern == 1 and player.participant.ingroup == 0:
-            partner = "a Southerner"
-            you = "a Northerner"
-        elif player.participant.northern == 0 and player.participant.ingroup == 1:
-            partner = "a Southerner"
-            you = "also a Southerner"
-        else:
-            partner = ""
-            you = ""
+    def before_next_page(player, timeout_happened):
+        player.participant.dictator = player.dictator
 
-        return{
-            'partner':partner,
-            'you':you
-        }
+
 
 class Out(Page):
 

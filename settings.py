@@ -24,14 +24,12 @@ SESSION_CONFIG_DEFAULTS = dict(
 
 PARTICIPANT_FIELDS = [
     'northern',
-    'ingroup',
     'return1',
     'return2',
     'return3',
-    'return4',
-    'return5',
     'tgfirst',
-    'know'
+    'dictator',
+    'paymentstage'
 ]
 SESSION_FIELDS = []
 
