@@ -12,8 +12,9 @@ class C(BaseConstants):
     NAME_IN_URL = 'workshop_overview_app'
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
-    MAX_NORTHERN = 10
-    MAX_SOUTHERN = 10
+    MIN_NORTHERN = 10
+    MIN_SOUTHERN = 10
+    MAX_PLAYERS = 30
 
 
 class Subsession(BaseSubsession):
@@ -33,6 +34,7 @@ class Player(BasePlayer):
             [3, '40-59 years'],
             [4, '60 years and over']
         ],
+        widget=widgets.RadioSelect
     )
     education = models.IntegerField(
         choices=[
@@ -42,13 +44,15 @@ class Player(BasePlayer):
             [4, 'Postgraduate degree or equivalent'],
             [5, 'PhD']
         ],
+        widget=widgets.RadioSelect
     )
-    accepted = models.IntegerField(initial=1)
+    accepted = models.IntegerField(initial=0)
     english_by_birth = models.IntegerField(
-        choices =[
+        choices=[
             [1, 'Yes'],
             [2, 'No'],
-        ]
+        ],
+        widget=widgets.RadioSelect
     )
     region_of_birth = models.IntegerField(
         choices=[
@@ -61,13 +65,15 @@ class Player(BasePlayer):
             [7, 'South West'],
             [8, 'West Midlands'],
             [9, 'Yorkshire and the Humber'],
-        ]
+        ],
+        widget=widgets.RadioSelect
     )
     currently_live_in_england = models.IntegerField(
         choices=[
             [1, 'Yes'],
             [2, 'No'],
-        ]
+        ],
+        widget=widgets.RadioSelect
     )
     gender = models.IntegerField(
         choices=[
@@ -75,7 +81,8 @@ class Player(BasePlayer):
             [2, 'Male'],
             [3, 'Other'],
             [4, 'Prefer not to say']
-        ]
+        ],
+        widget=widgets.RadioSelect
     )
     region_of_domicile = models.IntegerField(
         choices=[
@@ -88,7 +95,8 @@ class Player(BasePlayer):
             [7, 'South West'],
             [8, 'West Midlands'],
             [9, 'Yorkshire and the Humber'],
-        ]
+        ],
+        widget=widgets.RadioSelect
     )
     regional_identity = models.IntegerField(
         choices=[
@@ -96,10 +104,13 @@ class Player(BasePlayer):
             [2, 'Northerner'],
             [3, 'Southerner'],
             [4, 'None of the above']
-        ]
+        ],
+        widget=widgets.RadioSelect
     )
     northern = models.IntegerField(initial=0)  # Initialize as 0
     southern = models.IntegerField(initial=0)
+    northerngeog = models.IntegerField(initial=0)  # Initialize as 0
+    southerngeog = models.IntegerField(initial=0)
 
 # PAGES
 class Intro(Page):
@@ -131,13 +142,6 @@ class Birth(Page):
     def is_displayed(player):
         return player.accepted == 1
 
-    @staticmethod
-    def before_next_page(player, timeout_happened):
-        if player.region_of_birth !=2 and player.region_of_birth!=8:
-            player.accepted = 1
-        else:
-            player.accepted = 0
-
 class EnglandLive(Page):
     form_model = 'player'
     form_fields = ['currently_live_in_england']
@@ -165,16 +169,13 @@ class Domicile(Page):
     def before_next_page(player, timeout_happened):
         if player.region_of_birth == 1 or player.region_of_birth == 3 or player.region_of_birth == 6 or player.region_of_birth ==7 :
             if player.region_of_domicile == 1 or player.region_of_domicile == 3 or player.region_of_domicile == 6 or player.region_of_domicile == 7:
-                player.southern = 1
-                player.accepted = 1
+                player.southerngeog = 1
 
         elif player.region_of_birth == 4 or player.region_of_birth == 5 or player.region_of_birth == 9 :
             if player.region_of_domicile == 4 or player.region_of_domicile == 5 or player.region_of_domicile == 9:
-                player.northern = 1
-                player.accepted = 1
+                player.northerngeog = 1
 
-        else:
-            player.accepted = 0
+
 
 class Identity(Page):
     form_model = 'player'
@@ -187,27 +188,50 @@ class Identity(Page):
     @staticmethod
     def before_next_page(player, timeout_happened):
 
-        if player.southern == 1 and player.regional_identity == 3:
-            player.accepted = 1
-        elif player.northern == 1 and player.regional_identity == 2:
-            player.accepted = 1
+        if player.southerngeog == 1 and player.regional_identity == 3:
+            player.southern = 1
+        elif player.northerngeog == 1 and player.regional_identity == 2:
+            player.northern = 1
         else:
-            player.accepted = 0
-
+            player.northern = 0
+            player.southern = 0
         all_players = player.subsession.get_players()
 
+        # Count already admitted participants
         admitted_northern = len([p for p in all_players if p.northern == 1 and p.accepted == 1])
         admitted_southern = len([p for p in all_players if p.southern == 1 and p.accepted == 1])
+        total_admitted = len([p for p in all_players if p.accepted == 1])
+
+        remaining_spaces = C.MAX_PLAYERS - total_admitted
+        remaining_northern_needed = max(0, C.MIN_NORTHERN - admitted_northern)
+        remaining_southern_needed = max(0, C.MIN_SOUTHERN - admitted_southern)
 
         print(f"Admitted Northern: {admitted_northern}")
         print(f"Admitted Southern: {admitted_southern}")
+        print(f"Remaining spaces: {remaining_spaces}")
+        print(f"Remaining Northern needed: {remaining_northern_needed}")
+        print(f"Remaining Southern needed: {remaining_southern_needed}")
 
-        if player.northern == 1 and player.accepted == 1 and admitted_northern <= C.MAX_NORTHERN:
-            player.accepted = 1
-        elif player.southern == 1 and player.accepted == 1 and admitted_southern <= C.MAX_SOUTHERN:
-            player.accepted = 1
-        else:
-            player.accepted = 0
+        # Check if there is room for this player, given the constraints
+        if player.northern == 1:
+            if admitted_northern <= C.MIN_NORTHERN and total_admitted <= C.MAX_PLAYERS:
+                player.accepted = 1
+            elif remaining_spaces >= (remaining_northern_needed + remaining_southern_needed) and admitted_northern > C.MIN_NORTHERN:
+                player.accepted = 1
+            else:
+                player.accepted = 0
+        elif player.southern == 1:
+            if admitted_southern <= C.MIN_SOUTHERN and total_admitted <= C.MAX_PLAYERS:
+                player.accepted = 1
+            elif remaining_spaces >= (remaining_northern_needed + remaining_southern_needed) and admitted_southern > C.MIN_SOUTHERN:
+                player.accepted = 1
+            else:
+                player.accepted = 0
+        else:  # This player is neither Northern nor Southern
+            if remaining_spaces >= (remaining_northern_needed + remaining_southern_needed):
+                player.accepted = 1
+            else:
+                player.accepted = 0
 
 class Other(Page):
     form_model = 'player'
@@ -274,8 +298,15 @@ class Outro(Page):
 
 
 
-page_sequence = [Intro,
-                English, Birth, EnglandLive, Domicile,
-                Identity,
-                Other,
-                 Unsuccessful, Accepted, Outro]
+page_sequence = [
+    Intro,
+    English,
+    Birth,
+    EnglandLive,
+    Domicile,
+    Identity,
+    Other,
+    Unsuccessful,
+    Accepted,
+    Outro
+]

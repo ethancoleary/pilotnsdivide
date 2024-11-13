@@ -10,7 +10,7 @@ class C(BaseConstants):
     NAME_IN_URL = 'recipient'
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
-    CORRECT_ANSWERS = [4,1,3,3]
+    CORRECT_ANSWERS = [4,1,3,4]
 
 
 class Subsession(BaseSubsession):
@@ -57,22 +57,22 @@ class Player(BasePlayer):
     # Question 3: If you send 3 tokens what will be your payment for this stage?
     check3 = models.IntegerField(
         choices=[
-            [1, '0'],
-            [2, '1'],
-            [3, '2'],
-            [4, '3'],
-            [5, '4']
+            [1, '£0.00'],
+            [2, '£2.00'],
+            [3, '£4.00'],
+            [4, '£6.00'],
+            [5, '£8.00']
         ]
     )
 
     # Question 4: And your partner?
     check4 = models.IntegerField(
         choices=[
-            [1, '1'],
-            [2, '2'],
-            [3, '3'],
-            [4, '6'],
-            [5, '9']
+            [1, '£0.00'],
+            [2, '£2.00'],
+            [3, '£4.00'],
+            [4, '£6.00'],
+            [5, '£8.00']
         ]
     )
 
@@ -99,16 +99,28 @@ class AttentionChecks(Page):
     form_model = 'player'
     form_fields = ['check1', 'check2', 'check3', 'check4']
 
+    @staticmethod
     def error_message(self, values):
-        if values['check1'] != C.CORRECT_ANSWERS[0] or values['check2'] != C.CORRECT_ANSWERS[1] or values['check3'] != C.CORRECT_ANSWERS[2] or values['check4'] != C.CORRECT_ANSWERS[3]:
-            return ('At least one of your answers is incorrect. Recall, you receive 5 tokens at the start of the stage; your partner receives nothing.'
-                    ' If you send 3 tokens then you keep the remaining 2 and your partner is paid the number of tokens you send. Please try again.')
+        if values['check1'] != C.CORRECT_ANSWERS[0]:
+            return ('Your answer to question 1 is wrong.')
+
+        elif values['check2'] != C.CORRECT_ANSWERS[1]:
+            return ('Your answer to question 2 is wrong.')
+
+        elif values['check3'] != C.CORRECT_ANSWERS[2]:
+            return ('Your answer to question 3(i) is wrong.')
+
+        elif values['check4'] != C.CORRECT_ANSWERS[3]:
+            return ('Your answer to question 3(ii) is wrong.')
+
+
 
 
 class Dictator(Page):
     form_model = 'player'
     form_fields = ['dictator']
 
+    @staticmethod
     def before_next_page(player, timeout_happened):
         player.participant.dictator = player.dictator
 
@@ -136,6 +148,6 @@ class Out(Page):
 
 
 page_sequence = [StageTwoIntro,
-                # AttentionChecks,
+                AttentionChecks,
                 Dictator,
                  Out]

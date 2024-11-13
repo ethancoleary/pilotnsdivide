@@ -128,13 +128,22 @@ class AttentionChecks(Page):
     form_model = 'player'
     form_fields = ['check1', 'check2', 'check3', 'check4', 'check5']
 
+    @staticmethod
     def error_message(self, values):
-        if values['check1'] != C.CORRECT_ANSWERS[0] or values['check2'] != C.CORRECT_ANSWERS[1] or values['check3'] != \
-                C.CORRECT_ANSWERS[2] or values['check4'] != C.CORRECT_ANSWERS[3] or values['check5'] != \
-                C.CORRECT_ANSWERS[4]:
-            return (
-                'At least one of your answers is incorrect. Recall, your partner receives 2 tokens at the start of the stage; you receive nothing.'
-                ' Any token amount sent to you is tripled. Please try again.')
+        if values['check1'] != C.CORRECT_ANSWERS[0]:
+            return ('Your answer to question 1 is wrong.')
+
+        elif values['check2'] != C.CORRECT_ANSWERS[1]:
+            return ('Your answer to question 2 is wrong.')
+
+        elif values['check3'] != C.CORRECT_ANSWERS[2]:
+            return ('Your answer to question 3 is wrong.')
+
+        elif values['check4'] != C.CORRECT_ANSWERS[3]:
+            return ('Your answer to question 4(i) is wrong.')
+
+        elif values['check5'] != C.CORRECT_ANSWERS[4]:
+            return ('Your answer to question 4(ii) is wrong.')
 
 
 class Trustee(Page):
@@ -163,8 +172,10 @@ class Out(Page):
             'round': round
         }
 
-page_sequence = [StageOneIntro,
-                 AttentionChecks,
-                 Trustee,
-                 Out]
+page_sequence = [
+    StageOneIntro,
+    AttentionChecks,
+    Trustee,
+    Out
+]
 

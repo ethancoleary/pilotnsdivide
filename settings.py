@@ -6,7 +6,8 @@ SESSION_CONFIGS = [
         app_sequence=[
             'intro',
             'tg',
-             'dg','tg2',
+             'dg',
+            'tg2',
             'outro'
         ],
         num_demo_participants=5
@@ -19,7 +20,7 @@ SESSION_CONFIGS = [
 # e.g. self.session.config['participation_fee']
 
 SESSION_CONFIG_DEFAULTS = dict(
-    real_world_currency_per_point=1.00, participation_fee=0.00, doc=""
+    real_world_currency_per_point=1.00, participation_fee=1.00, doc=""
 )
 
 PARTICIPANT_FIELDS = [
@@ -38,7 +39,7 @@ SESSION_FIELDS = []
 LANGUAGE_CODE = 'en'
 
 # e.g. EUR, GBP, CNY, JPY
-REAL_WORLD_CURRENCY_CODE = 'USD'
+REAL_WORLD_CURRENCY_CODE = 'GBP'
 USE_POINTS = True
 
 ADMIN_USERNAME = 'admin'
